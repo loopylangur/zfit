@@ -233,14 +233,11 @@ class SumPDF(BaseFunctor):
         # make extended
         elif extended and not implicit:
             yields = fracs
-            pdfs = [pdf.create_extended(yield_) for pdf, yield_ in zip(pdfs, yields)]
-
-            implicit = True
 
         elif extended and implicit:
             yields = [pdf.get_yield() for pdf in pdfs]
 
-        if extended:
+        if extended and implicit:
             yield_fracs = [yield_ / tf.reduce_sum(yields) for yield_ in yields]
             self.fracs = yield_fracs
             # self.fracs = yield_fracs
