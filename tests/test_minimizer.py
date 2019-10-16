@@ -46,6 +46,21 @@ def create_loss():
     return loss, (a_param, b_param, c_param)
 
 
+def test_floating_flag():
+    obs = zfit.Space("x", limits=(-2, 3))
+    mu = zfit.Parameter("mu", 1.2, -4, 6)
+    sigma = zfit.Parameter("sigma", 1.3, 0.1, 10)
+    sigma.floating = False
+    gauss = zfit.pdf.Gauss(mu=mu, sigma=sigma, obs=obs)
+    normal_np = np.random.normal(loc=2., scale=3., size=10000)
+    data = zfit.Data.from_numpy(obs=obs, array=normal_np)
+    nll = zfit.loss.UnbinnedNLL(model=gauss, data=data)
+    minimizer = zfit.minimize.Minuit()
+    result = minimizer.minimize(nll, params=[mu, sigma])
+    assert list(result.params.keys()) == [mu]
+    assert sigma not in result.params
+
+
 def minimize_func(minimizer_class_and_kwargs):
     loss, (a_param, b_param, c_param) = create_loss()
 
