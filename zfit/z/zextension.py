@@ -206,7 +206,7 @@ class FunctionWrapperRegistry:
 
 tf_function = FunctionWrapperRegistry()
 
-function_tf = tf_function  # for only tensorflow inside
+function_tf_input = tf_function  # for only tensorflow inside
 function_sampling = tf_function
 
 
